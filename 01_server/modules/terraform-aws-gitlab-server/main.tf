@@ -109,7 +109,7 @@ resource "aws_security_group_rule" "egress_public" {
 }
 
 locals {
-  bastion_name = format("bastion-%s", random_id.name[0].hex)
+  bastion_name = random_id.name[0].hex
   user_data = templatefile("${path.module}/templates/userdata.sh.tpl", {
     domain         = var.domain
     traefik_domain = var.traefik_domain
