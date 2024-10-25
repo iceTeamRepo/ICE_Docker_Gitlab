@@ -200,7 +200,7 @@ Updated: 2024년 10월 25일 오후 4:33
         ```bash
           $ git clone https://github.com/iceTeamRepo/ICE_Docker_Gitlab.git
         ```
-    2. `/02_config/docker-compose.yaml` 파일을 열어 **gitlab.idtice.com** 을 알맞은 Domain 으로 수정
+    2. `/02_config/.env` 파일을 열어 변수 설정
     3. `/02_config/gitlab/ssl` 폴더를 열고 **ssl 인증서** 넣기. **주의:** 인증서는 **도메인 이름을 그대로 사용해야 인식됨.**
     4. 설치
         ```bash

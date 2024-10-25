@@ -65,9 +65,9 @@ services:
     restart: unless-stopped
 
   gitlab:
-    image: 'gitlab/gitlab-ee:17.2.1-ee.0'
+    image: ${GITLAB_IMAGE_TAG}
     restart: unless-stopped
-    hostname: gitlab.idtice.com
+    hostname: ${GITLAB_HOSTNAME}
     networks:
       - gitlab-network
     healthcheck:
