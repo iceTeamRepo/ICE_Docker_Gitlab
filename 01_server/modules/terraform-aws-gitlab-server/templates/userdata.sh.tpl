@@ -39,6 +39,7 @@ check_os() {
 
 #----------------------------------------------------------------------
 # preflight : 운영체제별 gitlab 설치위한 필요 패키지 및 유틸리티 설치
+#           :  SSH 프로토콜을 사용하여 서버에 연결하려면 서버에 OpenSSH가 설치되어 있어야 하며, 포트 22가 열려 있어야 함
 #----------------------------------------------------------------------
 preflight() {
   if [[ "$operating_system" == "ubuntu" ]]; then
@@ -126,6 +127,13 @@ install_docker_compose() {
   sudo usermod -aG docker ubuntu
 }
 
+add_internal_routing() {
+  echo "127.0.0.1 ${domain}" | sudo tee -a /etc/hosts
+%{ if traefik_domain != "" ~}
+  echo "127.0.0.1 ${traefik_domain}" | sudo tee -a /etc/hosts 
+%{ endif ~}
+}
+
 #----------------------------------------------------------------------
 # Main
 #----------------------------------------------------------------------
@@ -139,6 +147,7 @@ main() {
       configure_timezone
       configure_ssh_host_keys 
       install_docker_compose
+      add_internal_routing
       ;;
     *)
       echo "Unsupported operating system."

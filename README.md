@@ -201,6 +201,7 @@ Updated: 2024년 10월 25일 오후 4:33
           $ cd ICE_Docker_Gitlab/02_config
           
           # 서비스 시작
+          $ docker network create gitlab-network
           $ docker-compose up -d
           
           # 서비스 종료

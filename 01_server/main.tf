@@ -19,12 +19,14 @@ module "gitlab-network" {
 }
 
 module "gitlab_server" {
-  source        = "./modules/terraform-aws-gitlab-server"
-  create        = true
-  ssh_key_name  = local.gitlab-bastion.key_name
-  vpc_id        = module.gitlab-network.vpc_id
-  subnet_id     = module.gitlab-network.subnet_public_ids[0]
-  instance_type = "m5.large"
+  source         = "./modules/terraform-aws-gitlab-server"
+  create         = true
+  ssh_key_name   = local.gitlab-bastion.key_name
+  vpc_id         = module.gitlab-network.vpc_id
+  subnet_id      = module.gitlab-network.subnet_public_ids[0]
+  instance_type  = "m5.large"
+  domain         = var.domain
+  traefik_domain = "traefik.${var.domain}"
 }
 
 data "aws_route53_zone" "gitlab" {

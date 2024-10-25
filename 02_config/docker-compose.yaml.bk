@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ee:17.2.1-ee.0'
+    restart: always
+    hostname: gitlab.idtice.com
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.idtice.com'
+        gitlab_rails['gitlab_email_enabled'] = true
+        gitlab_rails['gitlab_email_from'] = 'noreply@gitlab.idtice.com'
+        gitlab_rails['gitlab_email_display_name'] = 'GitLab'
+        gitlab_rails['gitlab_email_reply_to'] = 'noreply@gitlab.idtice.com'
+        gitlab_rails['time_zone'] = 'Asia/Seoul'
+        nginx['redirect_http_to_https'] = true
+        nginx['listen_port'] = 443
+        nginx['listen_https'] = true
+        nginx['enable'] = true
+        prometheus['enable'] = false
+        postgresql['enable'] = true
+        letsencrypt['enable'] = false
+        alertmanager['enable'] = false
+        pages_nginx['enable'] = false
+        registry_nginx['enable'] = false
+        prometheus_monitoring['enable'] = false
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/log:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+      - './gitlab/ssl:/etc/gitlab/ssl'

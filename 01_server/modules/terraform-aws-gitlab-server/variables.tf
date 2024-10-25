@@ -36,3 +36,13 @@ variable "iam_instance_profile" {
 variable "vpc_id" {
   description = "VPC ID" 
 }
+
+variable "domain" {
+  description = "gitlab domain"
+}
+
+variable "traefik_domain" {
+  description = "traefik domain"
+  default = ""
+  
+}

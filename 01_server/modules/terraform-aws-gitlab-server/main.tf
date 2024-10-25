@@ -89,7 +89,10 @@ resource "aws_security_group_rule" "egress_public" {
 
 locals {
   bastion_name = format("bastion-%s", random_id.name[0].hex)
-  user_data = templatefile("${path.module}/templates/userdata.sh.tpl", {})
+  user_data = templatefile("${path.module}/templates/userdata.sh.tpl", {
+    domain         = var.domain
+    traefik_domain = var.traefik_domain
+  })
 }
 
 module "bastion_ec2_instance" {
@@ -109,13 +112,20 @@ module "bastion_ec2_instance" {
   user_data_base64       = base64encode(local.user_data)
 
   root_block_device = [
-    { 
-      volume_size           = 60              # 볼륨 크기 (GB)
-      volume_type           = "gp2"           # 볼륨 타입 (예: gp2, io1 등)
-      delete_on_termination = true            # 인스턴스 종료 시 볼륨 삭제 여부
-      encrypted             = false           # 볼륨 암호화 여부 
+    {
+      volume_size           = 60    # 볼륨 크기 (GB)
+      volume_type           = "gp2" # 볼륨 타입 (예: gp2, io1 등)
+      delete_on_termination = true  # 인스턴스 종료 시 볼륨 삭제 여부
+      encrypted             = false # 볼륨 암호화 여부 
     }
   ]
 
   tags = var.tags
 }
+
+resource "local_file" "userdata" {
+  count    = var.create ? 1 : 0
+  content  = local.user_data
+  filename = "${path.root}/debug/userdata.sh"
+}
+
