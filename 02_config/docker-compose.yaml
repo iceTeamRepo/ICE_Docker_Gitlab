@@ -1,5 +1,9 @@
 version: '3.3'
 
+networks:
+  gitlab-network:
+    external: true
+
 services:
 
   postgres:
