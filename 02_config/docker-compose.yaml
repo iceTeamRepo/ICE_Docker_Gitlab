@@ -14,7 +14,6 @@ services:
         gitlab_rails['gitlab_email_reply_to'] = 'noreply@gitlab.idtice.com'
         gitlab_rails['time_zone'] = 'Asia/Seoul'
         nginx['redirect_http_to_https'] = true
-        nginx['custom_nginx_config'] = 'include /etc/gitlab/nginx-redirect.conf;'
         nginx['listen_port'] = 443
         nginx['listen_https'] = true
         nginx['enable'] = true

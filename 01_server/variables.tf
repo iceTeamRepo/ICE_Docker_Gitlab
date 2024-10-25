@@ -30,3 +30,13 @@ variable "gitlab_network_vpc_cidrs_private" {
   type        = list(string)
   default     = ["172.19.48.0/20"]
 }
+
+variable "zone_name" {
+  description = "Route53 zone name"
+  default = "idtice.com"
+}
+
+variable "domain" {
+  description = "gitlab domain name"
+  default = "gitlab.idtice.com"
+}

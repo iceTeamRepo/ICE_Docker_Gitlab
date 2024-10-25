@@ -28,20 +28,67 @@ module "gitlab_server" {
 }
 
 data "aws_route53_zone" "gitlab" {
-  name         = "idtice.com"  
-  private_zone = false 
+  name         = var.zone_name
+  private_zone = false
 }
 
 resource "aws_route53_record" "gitlab" {
-  zone_id =  data.aws_route53_zone.gitlab.zone_id
-  name     = "gitlab.idtice.com"
-  type     = "A"
-  ttl      = 300
+  zone_id = data.aws_route53_zone.gitlab.zone_id
+  name    = var.domain
+  type    = "A"
+  ttl     = 300
   records = [module.gitlab_server.bastion_info.public_ip]
 }
 
 output "gitlab_server" {
   value = {
     bastion_info = module.gitlab_server.bastion_info
+  }
+}
+
+###########################################################################
+# Certs
+###########################################################################
+
+module "certs" {
+  source = "./modules/terraform-tls-certificate"
+
+  private_key_algorithm   = "RSA"
+  private_key_rsa_bits    = 2048
+  private_key_ecdsa_curve = "P256"
+  cert_file_name          = var.domain
+
+  ca_certificate = {
+    common_name           = "Root CA"
+    organization          = "Plateer Inc"
+    organizational_unit   = "Development"
+    street_address        = ["1234 Main Street"]
+    locality              = "Seoul"
+    province              = "ON"
+    country               = "Korea"
+    postal_code           = "A123456"
+    validity_period_hours = 87600 # 10 years
+    allowed_uses          = ["key_encipherment", "digital_signature", "cert_signing", "crl_signing"]
+  }
+
+  certificates = {
+    "gitlab" = {
+      common_name         = "gitlab"
+      organization        = "Plateer Inc"
+      organizational_unit = "Development"
+      street_address      = ["1234 Main Street"]
+      locality            = "Seoul"
+      province            = "ON"
+      country             = "Korea"
+      postal_code         = "A123456"
+      dns_names = [
+        var.domain
+      ]
+      ip_addresses = [
+        "127.0.0.1",
+      ]
+      validity_period_hours = 43800 # 5 years
+      allowed_uses          = ["key_encipherment", "digital_signature", "data_encipherment", "code_signing", "server_auth", "client_auth", ]
+    }
   }
 }
