@@ -1,6 +1,7 @@
-# gitlab docker 설치
+## gitlab docker 설치
 
-- **01 > SSL 인증서 발급**
+
+### 01 > SSL 인증서 발급
     1. Free SSL ([https://sslforweb.com/home](https://sslforweb.com/home)) 사이트에 로그인
     2. Create SSL
         
@@ -27,7 +28,7 @@
         ![image.png](/pictures/image%205.png)
         
     
-- **02 > Ubuntu Server 에 Docker 및 Docker Compose 설치**
+### 02 > Ubuntu Server 에 Docker 및 Docker Compose 설치
     
     ```bash
     #!/usr/bin/env bash
@@ -192,7 +193,7 @@
     main
     ```
 
-- **03 > 설치**
+### 03 > 설치
     1. 소스 다운로드
         ```bash
           $ git clone https://github.com/iceTeamRepo/ICE_Docker_Gitlab.git
@@ -223,9 +224,12 @@
         1. **gitlab** - https://<YOUR_DOMAIN> 에 접속하고 아래 명령으로 **root/<initial_password>**
         2. **phpldapadmin** - http://<YOUR_IP>:8090/ 에 접속하고 **cn=maintainer,dc=workspace,dc=local/maintainer-pswd**
 
-- **참조페이지**
+### 참조페이지
 
   - nginx configuration
     - https://docs.gitlab.com/omnibus/settings/nginx.html
   - https 설정
     - https://docs.gitlab.com/omnibus/settings/ssl/index.html#configure-https-manually
+  - ldap 설정
+    - https://docs.gitlab.com/ee/administration/auth/ldap/index.html
+    - https://docs.gitlab.com/ee/administration/auth/ldap/ldap_synchronization.html

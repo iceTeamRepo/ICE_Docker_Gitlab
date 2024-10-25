@@ -111,8 +111,6 @@ services:
         pages_nginx['enable'] = false
         registry_nginx['enable'] = false
         prometheus_monitoring['enable'] = false
-        # to enable ldap outh
-        # https://docs.gitlab.com/ee/administration/auth/ldap/index.html
         gitlab_rails['ldap_enabled'] = true
         gitlab_rails['prevent_ldap_sign_in'] = false
         gitlab_rails['ldap_servers'] = {
@@ -142,7 +140,6 @@ services:
             'group_base' => '${SEARCH_BASE_DN}',
           }
         }
-        # https://docs.gitlab.com/ee/administration/auth/ldap/ldap_synchronization.html
         gitlab_rails['ldap_sync_worker_cron'] = "0 */12 * * *"
         gitlab_rails['ldap_group_sync_worker_cron'] = "0 */2 * * * *"
     ports:
