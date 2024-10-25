@@ -64,17 +64,38 @@ resource "aws_security_group_rule" "https" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "portainer" {
+resource "aws_security_group_rule" "openldap_secure" {
   count = var.create ? 1 : 0
 
   security_group_id = aws_security_group.bastion[count.index].id
   type              = "ingress"
   protocol          = "tcp"
-  from_port         = 9000
-  to_port           = 9000
+  from_port         = 636
+  to_port           = 636
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "openldap" {
+  count = var.create ? 1 : 0
+
+  security_group_id = aws_security_group.bastion[count.index].id
+  type              = "ingress"
+  protocol          = "tcp"
+  from_port         = 389
+  to_port           = 389
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "phpldapadmin" {
+  count = var.create ? 1 : 0
+
+  security_group_id = aws_security_group.bastion[count.index].id
+  type              = "ingress"
+  protocol          = "tcp"
+  from_port         = 8090
+  to_port           = 8090
+  cidr_blocks       = ["0.0.0.0/0"]
+}
 
 resource "aws_security_group_rule" "egress_public" {
   count = var.create ? 1 : 0

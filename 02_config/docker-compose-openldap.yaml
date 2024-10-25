@@ -1,0 +1,155 @@
+version: '3.3'
+
+networks:
+  gitlab-network:
+    external: true
+
+services:
+  openldap:
+    image: osixia/openldap:1.5.0
+    container_name: openldap
+    restart: always
+    environment:
+      LDAP_LOG_LEVEL: '256'
+      LDAP_ORGANISATION: ${LDAP_ORGANISATION}
+      LDAP_DOMAIN: ${LDAP_DOMAIN}
+      LDAP_BASE_DN: ''
+      LDAP_ADMIN_PASSWORD: 'admin'
+      LDAP_CONFIG_PASSWORD: 'config'
+      LDAP_READONLY_USER: 'false'
+      LDAP_RFC2307BIS_SCHEMA: 'false'
+      LDAP_BACKEND: 'mdb'
+      LDAP_TLS: 'false'
+      LDAP_REPLICATION: 'false'
+      KEEP_EXISTING_CONFIG: 'false'
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: 'true'
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./openldap/ldap:/var/lib/ldap
+      - ./openldap/slapd:/etc/ldap/slapd.d
+      - ./openldap/init.ldif:/tmp/init.ldif
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    restart: always
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: 'openldap'
+      PHPLDAPADMIN_HTTPS: 'false'
+    ports:
+      - '${LDAP_ADMIN_PORT}:80'
+    depends_on:
+      - openldap
+
+  postgres:
+    image: ${GITLAB_POSTGRES_IMAGE_TAG}
+    volumes:
+      - './gitlab/db:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_DB: ${GITLAB_DB_NAME}
+      POSTGRES_USER: ${GITLAB_DB_USER}
+      POSTGRES_PASSWORD: ${GITLAB_DB_PASSWORD}
+    networks:
+      - gitlab-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${GITLAB_DB_NAME}", "-U", "${GITLAB_DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  gitlab:
+    image: 'gitlab/gitlab-ee:17.2.1-ee.0'
+    restart: unless-stopped
+    hostname: gitlab.idtice.com
+    networks:
+      - gitlab-network
+    healthcheck:
+      test: ["CMD", "curl", "-k", "-f", "https://localhost:443/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 240s
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '${GITLAB_URL}'
+        nginx['redirect_http_to_https'] = true
+        nginx['listen_port'] = 443
+        nginx['listen_https'] = true
+        nginx['enable'] = true
+        gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SHELL_SSH_PORT}
+        gitlab_rails['gitlab_email_enabled'] = true
+        gitlab_rails['gitlab_email_from'] = "${GITLAB_EMAIL_FROM}"
+        gitlab_rails['gitlab_email_reply_to'] = "${GITLAB_EMAIL_REPLY_TO}"
+        gitlab_rails['gitlab_email_display_name'] = 'GitLab'
+        gitlab_rails['time_zone'] = 'Asia/Seoul'
+        gitlab_rails['db_adapter'] = "${GITLAB_DB_TYPE}"
+        gitlab_rails['db_encoding'] = "unicode"
+        gitlab_rails['db_host'] = "postgres"
+        gitlab_rails['db_database'] = "${GITLAB_DB_NAME}"
+        gitlab_rails['db_username'] = "${GITLAB_DB_USER}"
+        gitlab_rails['db_password'] = "${GITLAB_DB_PASSWORD}"
+        gitlab_rails['smtp_enable'] = true
+        gitlab_rails['smtp_address'] = "${GITLAB_SMTP_ADDRESS}"
+        gitlab_rails['smtp_port'] = 587
+        gitlab_rails['smtp_user_name'] = "${GITLAB_SMTP_USER_NAME}"
+        gitlab_rails['smtp_password'] = "${GITLAB_SMTP_PASSWORD}"
+        gitlab_rails['smtp_domain'] = "${GITLAB_SMTP_ADDRESS}"
+        gitlab_rails['smtp_authentication'] = "login"
+        gitlab_rails['smtp_enable_starttls_auto'] = true
+        gitlab_rails['smtp_tls'] = false
+        prometheus['enable'] = false
+        postgresql['enable'] = false
+        letsencrypt['enable'] = false
+        alertmanager['enable'] = false
+        pages_nginx['enable'] = false
+        registry_nginx['enable'] = false
+        prometheus_monitoring['enable'] = false
+        # to enable ldap outh
+        # https://docs.gitlab.com/ee/administration/auth/ldap/index.html
+        gitlab_rails['ldap_enabled'] = true
+        gitlab_rails['prevent_ldap_sign_in'] = false
+        gitlab_rails['ldap_servers'] = {
+          'main' => {
+            'label' => 'LDAP',
+            'host' =>  'openldap',
+            'port' => '389',
+            'uid' => 'uid',
+            'encryption' => 'plain',
+            'verify_certificates' => 'false',
+            'bind_dn' => '${BIND_USER_DN}',
+            'password' => '${BIND_USER_PSWD}',
+            'timeout' => 10,
+            'active_directory' => 'false',
+            'allow_username_or_email_login' => 'false',
+            'block_auto_created_users' => 'false',
+            'base' => '${SEARCH_BASE_DN}',
+            'user_filter' => '',
+            'attributes' => {
+              'username' => ['uid'],
+              'email' => ['mail'],
+              'name' => 'cn',
+              'first_name' => 'givenName',
+              'last_name' => 'sn'
+            },
+            'lowercase_usernames' => true,
+            'group_base' => '${SEARCH_BASE_DN}',
+          }
+        }
+        # https://docs.gitlab.com/ee/administration/auth/ldap/ldap_synchronization.html
+        gitlab_rails['ldap_sync_worker_cron'] = "0 */12 * * *"
+        gitlab_rails['ldap_group_sync_worker_cron'] = "0 */2 * * * *"
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/log:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+      - './gitlab/ssl:/etc/gitlab/ssl'
+    depends_on:
+      postgres:
+        condition: service_healthy
