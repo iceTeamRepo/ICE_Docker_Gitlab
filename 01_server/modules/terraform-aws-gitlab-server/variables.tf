@@ -5,7 +5,7 @@ variable "create" {
 
 variable "name" {
   description = "Name for resources, defaults to \"gitlab\"."
-  default     = "gitlab"
+  default     = "gitlab-docker"
 }
 
 variable "tags" {
