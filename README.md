@@ -202,10 +202,11 @@ Updated: 2024년 10월 25일 오후 4:33
           
           # 서비스 시작
           $ docker network create gitlab-network
-          $ docker-compose up -d
+          $ docker compose -f docker-compose.yaml -p gitlab up -d
+          $ sudo docker exec -it $(sudo docker ps -aqf "name=gitlab-gitlab-1") grep 'Password:' /etc/gitlab/initial_root_password
           
           # 서비스 종료
-          $ docker-compose down
+          $ docker compose -f docker-compose.yaml -p gitlab down
         ```
 - **참조페이지**
 
