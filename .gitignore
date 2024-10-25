@@ -11,3 +11,9 @@ output/
 kubeconfig
 *.tmp
 debug/
+/02_config/gitlab/config/*
+/02_config/gitlab/data/*
+/02_config/gitlab/db/*
+/02_config/gitlab/log/*
+/02_config/openldap/ldap/*
+/02_config/openldap/slapd/*
