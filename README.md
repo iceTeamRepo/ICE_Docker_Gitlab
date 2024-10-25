@@ -184,18 +184,15 @@ Updated: 2024년 10월 25일 오후 4:33
     
     main
     ```
-    
+
 - **03 > 설치**
     1. 소스 다운로드
-        
         ```bash
           $ git clone https://github.com/iceTeamRepo/ICE_Docker_Gitlab.git
         ```
-        
     2. `/02_config/docker-compose.yaml` 파일을 열어 **gitlab.idtice.com** 을 LS산전의 Domain 으로 수정 
     3. `/02_config/gitlab/ssl` 폴더를 열고 **ssl 인증서** 넣기. 인증서는 domain 이름을 그대로 사용해야 인식됨
     4. 설치
-        
         ```bash
           $ sudo su
           $ cd ICE_Docker_Gitlab/02_config
@@ -208,6 +205,7 @@ Updated: 2024년 10월 25일 오후 4:33
           # 서비스 종료
           $ docker compose -f docker-compose.yaml -p gitlab down
         ```
+
 - **참조페이지**
 
   - nginx configuration

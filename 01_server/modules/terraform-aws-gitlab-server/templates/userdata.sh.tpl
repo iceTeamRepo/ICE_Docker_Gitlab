@@ -73,7 +73,7 @@ configure_timezone() {
 }
 
 #----------------------------------------------------------------------
-#  SSH hostkey 설정
+#  SSH Server 용 Hostkey 설정
 #----------------------------------------------------------------------
 configure_ssh_host_keys() {
   local ssh_static_dir="/etc/ssh_static"
@@ -127,6 +127,9 @@ install_docker_compose() {
   sudo usermod -aG docker ubuntu
 }
 
+#----------------------------------------------------------------------
+# 확인용 라우팅 추가
+#----------------------------------------------------------------------
 add_internal_routing() {
   echo "127.0.0.1 ${domain}" | sudo tee -a /etc/hosts
 %{ if traefik_domain != "" ~}
