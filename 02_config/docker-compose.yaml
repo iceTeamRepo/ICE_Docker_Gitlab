@@ -13,14 +13,10 @@ services:
         gitlab_rails['gitlab_email_display_name'] = 'GitLab'
         gitlab_rails['gitlab_email_reply_to'] = 'noreply@gitlab.idtice.com'
         gitlab_rails['time_zone'] = 'Asia/Seoul'
-        nginx['ssl_certificate'] = '/ssl/cert.crt'
-        nginx['ssl_certificate_key'] = '/ssl/cert.key'
         nginx['redirect_http_to_https'] = true
         nginx['custom_nginx_config'] = 'include /etc/gitlab/nginx-redirect.conf;'
         nginx['listen_port'] = 443
         nginx['listen_https'] = true
-        gitlab_rails['gitlab_shell_ssh_port'] = '2222'
-        gitlab_rails['gitlab_ssh_host'] = 'ssh.gitlab.idtice.com'
         nginx['enable'] = true
         prometheus['enable'] = false
         postgresql['enable'] = true
@@ -37,4 +33,4 @@ services:
       - './gitlab/config:/etc/gitlab'
       - './gitlab/log:/var/log/gitlab'
       - './gitlab/data:/var/opt/gitlab'
-      - './gitlab/ssl:/ssl'
+      - './gitlab/ssl:/etc/gitlab/ssl'

@@ -193,7 +193,7 @@ Updated: 2024년 10월 25일 오후 4:33
         ```
         
     2. `/02_config/docker-compose.yaml` 파일을 열어 **gitlab.idtice.com** 을 LS산전의 Domain 으로 수정 
-    3. `/02_config/gitlab/ssl` 폴더를 열고 **ssl 인증서** 넣기
+    3. `/02_config/gitlab/ssl` 폴더를 열고 **ssl 인증서** 넣기. 인증서는 domain 이름을 그대로 사용해야 인식됨
     4. 설치
         
         ```bash
@@ -206,3 +206,9 @@ Updated: 2024년 10월 25일 오후 4:33
           # 서비스 종료
           $ docker-compose down
         ```
+- **참조페이지**
+
+  - nginx configuration
+    - https://docs.gitlab.com/omnibus/settings/nginx.html
+  - https 설정
+    - https://docs.gitlab.com/omnibus/settings/ssl/index.html#configure-https-manually
