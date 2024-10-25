@@ -28,7 +28,7 @@ services:
     volumes:
       - ./openldap/ldap:/var/lib/ldap
       - ./openldap/slapd:/etc/ldap/slapd.d
-      - ./openldap/init.ldif:/tmp/init.ldif
+      - ./openldap/init/init.ldif:/tmp/init.ldif
 
   phpldapadmin:
     image: osixia/phpldapadmin:latest
