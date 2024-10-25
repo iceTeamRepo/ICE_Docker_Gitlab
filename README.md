@@ -210,11 +210,21 @@ Updated: 2024년 10월 25일 오후 4:33
           # 서비스 시작
           $ docker network create gitlab-network
           $ docker compose -f docker-compose.yaml -p gitlab up -d
-          $ sudo docker exec -it $(sudo docker ps -aqf "name=gitlab-gitlab-1") grep 'Password:' /etc/gitlab/initial_root_password
           
+          # Gitlab root <initial_password> 얻기
+          $ sudo docker exec -it $(sudo docker ps -aqf "name=gitlab-gitlab-1") grep 'Password:' /etc/gitlab/initial_root_password
+
+          # Openldap - Sample DIF 적용
+          $ docker exec -it openldap ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/init.ldif
+
           # 서비스 종료
           $ docker compose -f docker-compose.yaml -p gitlab down
+          $ docker network rm gitlab-network
         ```
+  
+     5. 확인
+        1. gitlab - https://<YOUR_DOMAIN> 에 접속하고 아래 명령으로 root/<initial_password>
+        2. phpldapadmin - http://<YOUR_IP>:8090/ 에 접속하고 cn=maintainer,dc=workspace,dc=local/maintainer-pswd
 
 - **참조페이지**
 
