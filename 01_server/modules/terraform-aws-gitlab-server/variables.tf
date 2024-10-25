@@ -40,9 +40,3 @@ variable "vpc_id" {
 variable "domain" {
   description = "gitlab domain"
 }
-
-variable "traefik_domain" {
-  description = "traefik domain"
-  default = ""
-  
-}

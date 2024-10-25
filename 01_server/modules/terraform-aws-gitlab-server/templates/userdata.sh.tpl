@@ -132,9 +132,6 @@ install_docker_compose() {
 #----------------------------------------------------------------------
 add_internal_routing() {
   echo "127.0.0.1 ${domain}" | sudo tee -a /etc/hosts
-%{ if traefik_domain != "" ~}
-  echo "127.0.0.1 ${traefik_domain}" | sudo tee -a /etc/hosts 
-%{ endif ~}
 }
 
 #----------------------------------------------------------------------

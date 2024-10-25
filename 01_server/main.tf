@@ -26,7 +26,6 @@ module "gitlab_server" {
   subnet_id      = module.gitlab-network.subnet_public_ids[0]
   instance_type  = "m5.large"
   domain         = var.domain
-  traefik_domain = "traefik.${var.domain}"
 }
 
 data "aws_route53_zone" "gitlab" {
