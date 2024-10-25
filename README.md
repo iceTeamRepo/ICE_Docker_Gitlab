@@ -1,7 +1,4 @@
-# 02. gitlab 신규 설치
-
-Created: 2024년 10월 25일 오전 10:47
-Updated: 2024년 10월 25일 오후 4:33
+# gitlab docker 설치
 
 - **01 > SSL 인증서 발급**
     1. Free SSL ([https://sslforweb.com/home](https://sslforweb.com/home)) 사이트에 로그인
