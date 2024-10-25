@@ -1,13 +1,12 @@
 
 locals {
-  gitlab-bastion = {
+  gitlab_bastion = {
     key_name             = "devops_tool_key"
     key_local_path       = "C://Key/devops_tool_key.pem"
-    key_remote_copy_path = "/home/ec2-user/devops_tool_key.pem"
   }
 }
 
-module "gitlab-network" {
+module "gitlab_network" {
   source            = "./modules/terraform-aws-network"
   create            = true
   create_vpc        = true
@@ -21,9 +20,9 @@ module "gitlab-network" {
 module "gitlab_server" {
   source         = "./modules/terraform-aws-gitlab-server"
   create         = true
-  ssh_key_name   = local.gitlab-bastion.key_name
-  vpc_id         = module.gitlab-network.vpc_id
-  subnet_id      = module.gitlab-network.subnet_public_ids[0]
+  ssh_key_name   = local.gitlab_bastion.key_name
+  vpc_id         = module.gitlab_network.vpc_id
+  subnet_id      = module.gitlab_network.subnet_public_ids[0]
   instance_type  = "m5.large"
   domain         = var.domain
 }
@@ -40,16 +39,6 @@ resource "aws_route53_record" "gitlab" {
   ttl     = 300
   records = [module.gitlab_server.bastion_info.public_ip]
 }
-
-output "gitlab_server" {
-  value = {
-    bastion_info = module.gitlab_server.bastion_info
-  }
-}
-
-###########################################################################
-# Certs
-###########################################################################
 
 module "certs" {
   source = "./modules/terraform-tls-certificate"
