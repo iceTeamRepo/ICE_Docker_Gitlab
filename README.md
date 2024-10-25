@@ -223,8 +223,8 @@ Updated: 2024년 10월 25일 오후 4:33
         ```
   
      5. 확인
-        1. gitlab - https://<YOUR_DOMAIN> 에 접속하고 아래 명령으로 root/<initial_password>
-        2. phpldapadmin - http://<YOUR_IP>:8090/ 에 접속하고 cn=maintainer,dc=workspace,dc=local/maintainer-pswd
+        1. **gitlab** - https://<YOUR_DOMAIN> 에 접속하고 아래 명령으로 **root/<initial_password>**
+        2. **phpldapadmin** - http://<YOUR_IP>:8090/ 에 접속하고 **cn=maintainer,dc=workspace,dc=local/maintainer-pswd**
 
 - **참조페이지**
 
