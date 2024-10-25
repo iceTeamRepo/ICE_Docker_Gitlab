@@ -1,0 +1,137 @@
+version: '3.3'
+
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ee:17.2.1-ee.0'
+    restart: always
+    hostname: gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.idtice.com'
+
+        #################################################
+        # Email Settings
+        #################################################
+        gitlab_rails['gitlab_email_enabled'] = true
+        gitlab_rails['gitlab_email_from'] = 'noreply@gitlab.idtice.com'
+        gitlab_rails['gitlab_email_display_name'] = 'GitLab'
+        gitlab_rails['gitlab_email_reply_to'] = 'noreply@gitlab.idtice.com'
+
+        #################################################
+        # Timezone Settings
+        #################################################
+        gitlab_rails['time_zone'] = 'Asia/Seoul'
+
+        #################################################
+        # Nginx Settings
+        #################################################
+        nginx['ssl_certificate'] = '/ssl/cert.crt'
+        nginx['ssl_certificate_key'] = '/ssl/cert.key'
+        nginx['redirect_http_to_https'] = true
+        nginx['custom_nginx_config'] = 'include /etc/gitlab/nginx-redirect.conf;'
+        nginx['listen_port'] = 443
+        nginx['listen_https'] = true 
+
+        #################################################
+        # SSH Settings
+        #################################################
+        gitlab_rails['gitlab_shell_ssh_port'] = '2222'
+        gitlab_rails['gitlab_ssh_host'] = 'ssh.gitlab.idtice.com'
+
+        #################################################
+        # Monitoring settings
+        #################################################
+        gitlab_rails['monitoring_whitelist'] = ['0.0.0.0/0', '::1/128']
+
+        #################################################
+        # LDAP Settings
+        #################################################
+        #gitlab_rails['ldap_enabled'] = true
+        #gitlab_rails['ldap_host'] = xxxxxxxxxxxxx
+        #gitlab_rails['ldap_port'] = xxxx
+        #gitlab_rails['ldap_uid'] = 'sAMAccountName'
+        #gitlab_rails['ldap_method'] = 'plain'
+        #gitlab_rails['active_directory'] = 'true'
+        #gitlab_rails['ldap_bind_dn'] = xxxx
+        #gitlab_rails['ldap_password'] = xxxx
+        #gitlab_rails['ldap_allow_username_or_email_login'] = true
+        #gitlab_rails['ldap_base'] = 'dc=xxx, dc=xxx
+
+        #################################################
+        # SMTP Settings
+        #################################################
+        #gitlab_rails['smtp_enable'] = true
+        #gitlab_rails['smtp_address'] = xxxxxxx
+        #gitlab_rails['smtp_port'] = xxx
+        #gitlab_rails['smtp_user_name'] = xxxx
+        #gitlab_rails['smtp_tls'] = false
+        #gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+        #gitlab_rails['smtp_enable_starttls_auto'] = false
+        #gitlab_rails['smtp_ssl'] = false
+        #gitlab_rails['smtp_force_ssl'] = false
+ 
+        #################################################
+        # Feature Flags
+        #################################################
+        nginx['enable'] = true
+        prometheus['enable'] = false
+        postgresql['enable'] = true
+        letsencrypt['enable'] = false
+        alertmanager['enable'] = false
+        pages_nginx['enable'] = false
+        registry_nginx['enable'] = false
+        prometheus_monitoring['enable'] = false
+
+        #################################################
+        # 아래는 디폴트 값임
+        #################################################
+        # nginx['enable'] = true
+        # postgresql['enable'] = true
+        # redis['enable'] = true
+        # gitaly['enable'] = true
+        # registry['enable'] = true
+        # gitlab_workhorse['enable'] = true
+        # puma['enable'] = true
+        # sidekiq['enable'] = true
+        # gitlab_sshd['enable'] = false
+        # redis_master_role['enable'] = true
+        # redis_replica_role['enable'] = true
+        # logrotate['enable'] = true
+        # manage_accounts['enable'] = true
+        # manage_storage_directories['enable'] = false
+        # gitlab_pages['enable'] = false
+        # pages_nginx['enable'] = true
+        # gitlab_kas['enable'] = true
+        # mattermost['enable'] = false
+        # mattermost_nginx['enable'] = false
+        # registry_nginx['enable'] = false
+        # monitoring_role['enable'] = true
+        # prometheus['enable'] = true
+        # alertmanager['enable'] = true
+        # node_exporter['enable'] = true
+        # redis_exporter['enable'] = true
+        # postgres_exporter['enable'] = true
+        # pgbouncer_exporter['enable'] = false
+        # gitlab_exporter['enable'] = true
+        # prometheus_monitoring['enable'] = true 
+        # praefect['enable'] = false
+        # storage_check['enable'] = false
+        # letsencrypt['enable'] = false
+        # redis_sentinel_role['enable'] = true
+        # sentinel['enable'] = true
+        # geo_postgresql['enable'] = false
+        # geo_logcursor['enable'] = false
+        # pgbouncer['enable'] = false
+        # patroni['enable'] = false
+        # patroni['standby_cluster']['enable'] = false
+        # consul['enable'] = false
+        # spamcheck['enable'] = false
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+    volumes:
+      - ./gitlab/config:/etc/gitlab
+      - ./gitlab/log:/var/log/gitlab
+      - ./gitlab/data:/var/opt/gitlab
+      - ./gitlab/ssl:/ssl
