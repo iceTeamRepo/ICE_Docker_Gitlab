@@ -1,6 +1,6 @@
 output "bastion_info" {
   value = {
-    pubic_ip = var.create ?  module.bastion_ec2_instance[0].public_ip : null
+    public_ip = var.create ?  module.bastion_ec2_instance[0].public_ip : null
     security_group_id =  var.create ? aws_security_group.bastion[0].id : null
   } 
 }

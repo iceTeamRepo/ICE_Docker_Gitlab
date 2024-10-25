@@ -27,6 +27,19 @@ module "gitlab_server" {
   instance_type = "m5.large"
 }
 
+data "aws_route53_zone" "gitlab" {
+  name         = "idtice.com"  
+  private_zone = false 
+}
+
+resource "aws_route53_record" "gitlab" {
+  zone_id =  data.aws_route53_zone.gitlab.zone_id
+  name     = "gitlab.idtice.com"
+  type     = "A"
+  ttl      = 300
+  records = [module.gitlab_server.bastion_info.public_ip]
+}
+
 output "gitlab_server" {
   value = {
     bastion_info = module.gitlab_server.bastion_info
