@@ -267,11 +267,7 @@ nginx, mysql 같은 다른 패키지들과 달리, GitLab을 구성할 시 단�
 
 ![image.png](/pictures/image%206.png)
 
-관련하여 [https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html](https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html) 에 메모리 최적화 방안은 아래와 같다.
-
- [Running GitLab in a memory-constrained environment](https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html) 을 참고하였다.
-
-기본값과 비교해 보려면 [gitlab.rb의 default](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L2625-2647) 값 페이지를 확인해보자.
+관련하여 [https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html](https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html) 에 메모리 최적화 방안은 아래와 같다. 기본값과 비교해 보려면 [gitlab.rb의 default](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L2625-2647) 값 페이지를 확인해보자.
 
 ```bash
 # /etc/gitlab/gitlab.rb
