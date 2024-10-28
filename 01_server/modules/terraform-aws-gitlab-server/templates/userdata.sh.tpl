@@ -103,10 +103,10 @@ EOF'
 # Docker 및 Docker Compose 설치
 #----------------------------------------------------------------------
 install_docker_compose() {
-	sudo sysctl -w vm.max_map_count=262144
-	sudo sysctl -w fs.file-max=65536
-	sudo ulimit -n 65536
-	sudo ulimit -u 4096
+	sudo sysctl -w vm.max_map_count=262144 # 프로세스가 사용할 수 있는 최대 메모리 매핑 수 증가, 기본값 65536
+	sudo sysctl -w fs.file-max=65536 # 설정 가능한 값 10000~65536
+	sudo ulimit -n 65536 # 현재 세션에서 사용할 수 있는 최대 파일 디스크립터 수를 설정
+	sudo ulimit -u 4096 # 현재 사용자에 의해 생성될 수 있는 최대 프로세스 수를 설정
 	
 	# docker install
 	curl -fsSL get.docker.com -o get-docker.sh
@@ -119,8 +119,9 @@ install_docker_compose() {
 	sudo mv ./dcs /usr/bin/dcs
 	
 	# docker-compose install
-	curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-	chmod +x /usr/local/bin/docker-compose
+	#curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  curl -L "https://github.com/docker/compose/releases/download/2.29.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
 	ln -sfT /usr/local/bin/docker-compose /usr/bin/docker-compose
 
   # ubuntu 를 docker 그룹에 추가

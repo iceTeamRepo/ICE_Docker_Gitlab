@@ -223,6 +223,34 @@
         1. **gitlab** - https://<YOUR_DOMAIN> 에 접속하고 아래 명령으로 **root/<initial_password>**
         2. **phpldapadmin** - http://<YOUR_IP>:8090/ 에 접속하고 **cn=maintainer,dc=workspace,dc=local/maintainer-pswd**
 
+- **04 > 백업 및 복원**
+
+  - [Backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html)
+      - 사용중인 GitLab License와 버전 전체 확인 (버전이 다를 시 restore 불가)
+      - [GitLab 설정파일](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html?tab=Linux+package#storing-configuration-files) 백업
+          - Linux Package
+              - /etc/gitlab/gitlab-secrets.json
+              - /etc/gitlab/gitlab.rb
+          - Docker
+              - /srv/gitlab/config
+      - [백업 명령어](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html?tab=Docker#backup-command)
+          - Linux Package
+              - sudo gitlab-backup create
+          - Docker
+              - docker exec **t** <container name> gitlab-backup create
+  - [Restore](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html)
+      - 동일한 버전의 GitLab Server 재구축
+      - [Linux](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations)
+          - puma와 sidekiq 서비스 중지
+              - sudo gitlab-ctl stop puma
+              - sudo gitlab-ctl stop sidekiq
+          - 백업 데이터를 백업 경로(/var/opt/gitlab/backups)로 옮긴 후 restore
+              - sudo gitlab-backup restore BACKUP=<백업데이터파일명>
+          - gitlab 재시작
+              - sudo gitlab-ctl restart
+      - [Docker](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-docker-image-and-gitlab-helm-chart-installations)
+          - 컨테이너 내부에서 위의 절차 반복 (상세내역은 문서참조)
+
 - **참조페이지**
 
   - nginx configuration
