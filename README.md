@@ -237,7 +237,7 @@
           - Linux Package
               - sudo gitlab-backup create
           - Docker
-              - docker exec **t** <container name> gitlab-backup create
+              - docker exec -it <container name> gitlab-backup create
   - [Restore](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html)
       - 동일한 버전의 GitLab Server 재구축
       - [Linux](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations)
