@@ -1,4 +1,4 @@
-### gitlab docker 설치
+## gitlab docker 설치
 
 
 - **01 > SSL 인증서 발급**
@@ -261,7 +261,7 @@
     - https://docs.gitlab.com/ee/administration/auth/ldap/index.html
     - https://docs.gitlab.com/ee/administration/auth/ldap/ldap_synchronization.html
   
-#### gitlab 리소스 조정
+## gitlab 리소스 조정
  
 nginx, mysql 같은 다른 패키지들과 달리, GitLab을 구성할 시 단순히 GitLab이 설치 되는것이 아니라 GitLab Rails(Puma, Sidekiq, etc), Gitaly, Redis, PostgreSQL, Nginx, Promethus 같은 네트워크, 스토리지, 모니터링 관련 여러 구성요소가 한꺼번에 설치된다.([Gitlab ombinus, Reference Architectures 참고](https://docs.gitlab.com/ee/administration/reference_architectures/1k_users.html))
 
