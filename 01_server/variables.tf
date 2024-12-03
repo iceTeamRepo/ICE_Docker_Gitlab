@@ -40,3 +40,15 @@ variable "domain" {
   description = "gitlab domain name"
   default = "gitlab.idtice.com"
 }
+
+variable "key_name" {
+  description = "The name of the key"
+  type        = string
+  default     = "devops_tool_key"
+}
+
+variable "key_local_path" {
+  description = "The local path to the key file"
+  type        = string
+  default     = "C://Key/devops_tool_key.pem"
+}
